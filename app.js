@@ -4,6 +4,8 @@ const app = express();
 const tasks = require("./routes/tasks");
 const todos = require("./routes/todos");
 
+const connectDB = require("./db/connect");
+require("dotenv").config();
 // middleware - this allows the server to parse JSON request bodies. It is used to parse HTTP reuqest bodies that have a `Content-Type` header of `application/json`
 app.use(express.json());
 
@@ -28,4 +30,13 @@ app.use("/api/v1/todos", todos);
 // set the port of our application
 const port = 3005;
 
-app.listen(port, console.log("Server started on port " + port));
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+    app.listen(port, console.log("Server started on port " + port));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
