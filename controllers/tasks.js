@@ -5,10 +5,12 @@ const getAllTasks = (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  const task = await Task.create(req.body);
-  res.status(201).json({ task });
-  // res.send("create single task");
-  // res.json(req.body);
+  try {
+    const task = await Task.create(req.body);
+    res.status(201).json({ task });
+  } catch (err) {
+    res.status(500).json({ msg: err }); // general server error
+  }
 };
 
 const getSingleTask = (req, res) => {
